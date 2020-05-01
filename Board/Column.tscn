@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Board/Piece.tscn" type="PackedScene" id=1]
+
+[node name="Column" type="Area2D"]
+
+[node name="ColumnArea" type="CollisionPolygon2D" parent="."]
+visible = false
+position = Vector2( 242.779, 15.1331 )
+scale = Vector2( 0.554079, 0.586188 )
+polygon = PoolVector2Array( -513.185, -462.786, -509.404, 472.881, -363.856, 472.881, -362.001, -461.613 )
+
+[node name="Piece0" parent="." instance=ExtResource( 1 )]
+position = Vector2( -0.119446, 207.893 )
+scale = Vector2( 0.586188, 0.586188 )
+
+[node name="Piece1" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0.137573, 124.746 )
+scale = Vector2( 0.586188, 0.586188 )
+
+[node name="Piece2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0.00958252, 41.4704 )
+scale = Vector2( 0.586188, 0.586188 )
+
+[node name="Piece3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0.00958252, -41.42 )
+scale = Vector2( 0.586188, 0.586188 )
+
+[node name="Piece4" parent="." instance=ExtResource( 1 )]
+position = Vector2( -0.131439, -124.812 )
+scale = Vector2( 0.586188, 0.586188 )
+
+[node name="Piece5" parent="." instance=ExtResource( 1 )]
+position = Vector2( -0.253418, -207.978 )
+scale = Vector2( 0.586188, 0.586188 )

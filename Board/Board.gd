@@ -12,6 +12,10 @@ func clear():
       var piece = getPiece(colIndex, rowIndex)
       piece.visible = false
 
+func getColumn(x : int):
+  var columnName = 'Column' + str(x)
+  return get_node(columnName)
+
 # Get piece at the given x, y (col, row) coordinate
 func getPiece(x : int, y : int):
   var columnName = 'Column' + str(x)
@@ -21,4 +25,14 @@ func getPiece(x : int, y : int):
 # === Process functions ===
 
 func _ready():
-  pass
+  for colIndex in range(0, COL_NUM):
+    var column = getColumn(colIndex)
+    column.connect('mouse_entered', self, '_handle_Column_mouse_entered', [colIndex])
+    column.connect('mouse_exited', self, '_handle_Column_mouse_exited', [colIndex])
+
+# === Event handlers ===
+func _handle_Column_mouse_entered(index : int):
+  print(index)
+
+func _handle_Column_mouse_exited(index : int):
+  print(index)
