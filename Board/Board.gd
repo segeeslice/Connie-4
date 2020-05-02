@@ -26,15 +26,9 @@ func get_column(x : int):
 # Get piece at the given x, y (col, row) coordinate
 func get_piece(x : int, y : int):
   var col_name = 'Column' + str(x)
-  var piece_name = col_name + '/Piece' + str(y)
-  return get_node(piece_name)
+  return get_node(col_name).get_piece(y)
 
-# TODO: instead of highlighting whole column, give "ghost" of placement
-func set_column_highlighted(col_index : int, val : bool):
-  for row_index in range(0, ROW_NUM):
-    var piece = get_piece(col_index, row_index)
-    piece.highlighted = val
-
+# TODO: to main
 func switch_player_color():
   player_color = ColorMode.BLACK if player_color == ColorMode.RED else ColorMode.RED
 
@@ -42,17 +36,6 @@ func switch_player_color():
 # func can_place (col_index : int):
   # if col_index < 0 or col_index > COL_NUM: return false
   # if
-
-# TODO: move to column; add signal to catch in main that returns column clicked
-func place_piece(col_index : int):
-  if col_index < 0 or col_index > COL_NUM: return
-
-  for row_index in range(0, ROW_NUM):
-    var piece = get_piece(col_index, row_index)
-    if !piece.visible:
-      piece.color = player_color
-      piece.visible = true
-      return
 
 # === Process functions ===
 
@@ -64,17 +47,18 @@ func _ready():
 
 func _input(event):
   if highlighted_col_index >= 0 and event.is_pressed() and event.button_index == BUTTON_LEFT:
-    place_piece(highlighted_col_index)
+    get_column(highlighted_col_index).place_piece(player_color)
     switch_player_color()
 
 # === Event handlers ===
 
+# TODO: move to main as necessary
 func _handle_Column_mouse_entered(col_index : int):
   if !highlight_enabled: return
-  set_column_highlighted(col_index, true)
+  get_column(col_index).set_highlighted(true)
   highlighted_col_index = col_index
 
 func _handle_Column_mouse_exited(col_index : int):
-  set_column_highlighted(col_index, false)
+  get_column(col_index).set_highlighted(false)
   if highlighted_col_index == col_index:
     highlighted_col_index = -1

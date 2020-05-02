@@ -10,8 +10,10 @@ var highlighted = false setget set_highlighted, get_highlighted
 func set_color_mode(val : int):
   color = val
 
-  $RedSprite.visible = val == ColorMode.RED
-  $BlackSprite.visible = val == ColorMode.BLACK
+  $RedSprite.visible = val == ColorMode.RED && !highlighted
+  $RedSpriteHighlighted.visible = val == ColorMode.RED && highlighted
+  $BlackSprite.visible = val == ColorMode.BLACK && !highlighted
+  $BlackSpriteHighlighted.visible = val == ColorMode.BLACK && highlighted
 
 func get_color_mode(): return color
 
