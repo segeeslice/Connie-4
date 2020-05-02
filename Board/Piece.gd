@@ -13,10 +13,6 @@ func set_color_mode(val : int):
   $RedSprite.visible = val == ColorMode.RED
   $BlackSprite.visible = val == ColorMode.BLACK
 
-  print($RedSprite.visible)
-  print($BlackSprite.visible)
-  print('')
-
 func get_color_mode(): return color
 
 func set_highlighted(val : bool):
