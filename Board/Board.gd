@@ -29,6 +29,19 @@ func get_piece(x : int, y : int):
   var col_name = 'Column' + str(x)
   return get_node(col_name).get_piece(y)
 
+# Get 2D array of all the colors currently in place on the board
+# If no piece is placed yet, ColorMode.NONE is put instead
+func get_color_matrix():
+  var matrix = []
+
+  for x in range(0, COL_NUM):
+    matrix.append([])
+    for y in range(0, ROW_NUM):
+      var piece = get_piece(x, y)
+      matrix[x].append(piece.color if piece.visible else ColorMode.NONE)
+
+  return matrix
+
 # === Process functions ===
 
 func _ready():

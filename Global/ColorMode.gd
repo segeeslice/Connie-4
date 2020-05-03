@@ -1,3 +1,3 @@
 class_name ColorMode
 
-enum { RED, BLACK }
+enum { RED, BLACK, NONE = -1 }
