@@ -2,13 +2,14 @@ extends Node2D
 
 const ColorMode = preload("../Global/ColorMode.gd")
 
+signal column_clicked(col)
+
 const COL_NUM = 7
 const ROW_NUM = 6
 
 # Controls if columns should be highlighted on mouse hover
 var highlight_enabled = true
 var highlighted_col_index = -1
-var player_color = ColorMode.RED
 
 # === API ===
 
@@ -28,15 +29,6 @@ func get_piece(x : int, y : int):
   var col_name = 'Column' + str(x)
   return get_node(col_name).get_piece(y)
 
-# TODO: to main
-func switch_player_color():
-  player_color = ColorMode.BLACK if player_color == ColorMode.RED else ColorMode.RED
-
-# TODO
-# func can_place (col_index : int):
-  # if col_index < 0 or col_index > COL_NUM: return false
-  # if
-
 # === Process functions ===
 
 func _ready():
@@ -47,8 +39,7 @@ func _ready():
 
 func _input(event):
   if highlighted_col_index >= 0 and event.is_pressed() and event.button_index == BUTTON_LEFT:
-    get_column(highlighted_col_index).place_piece(player_color)
-    switch_player_color()
+    emit_signal('column_clicked', get_column(highlighted_col_index))
 
 # === Event handlers ===
 
