@@ -81,47 +81,96 @@ func _handle_winner(winner):
 # E.g. we have 3 red pieces in a row in one area, 2 red in a row in another:
 # { (Red enum): { 2: 1, 3: 1 } ... }
 
-# NOTE: *Very* similar to _get_vertical_count. Could centralize somehow?
-func _get_horizontal_count (color_matrix):
+# Generate the a count dict based on one list of colors
+# Can be used for any abstract set to check (row, column, diagonals)
+func _get_count_dict (color_list):
   var dict = {
       ColorMode.RED: {},
       ColorMode.BLACK: {}
       }
 
-  var col_num = color_matrix.size()
-  var row_num = color_matrix[0].size()
+  var temp_counts = {
+      ColorMode.RED: 0,
+      ColorMode.BLACK: 0
+      }
 
-  for row_index in row_num:
-    var temp_counts = {
-        ColorMode.RED: 0,
-        ColorMode.BLACK: 0
-        }
-
-    for col_index in col_num:
-      var color = color_matrix[col_index][row_index]
-
-      for k in temp_counts:
-        if k == color:
-          temp_counts[k] += 1
-        elif temp_counts[k] > 0:
-          if not temp_counts[k] in dict[k]:
-            dict[k][temp_counts[k]] = 0
-
-          dict[k][temp_counts[k]] += 1
-          temp_counts[k] = 0
-
-    # Final check before going to next row
+  for color in color_list:
     for k in temp_counts:
-      if temp_counts[k] > 0:
+      if k == color:
+        temp_counts[k] += 1
+
+      elif temp_counts[k] > 0:
         if not temp_counts[k] in dict[k]:
           dict[k][temp_counts[k]] = 0
 
         dict[k][temp_counts[k]] += 1
+        temp_counts[k] = 0
+
+  # Final parse of temp counts
+  # TODO: make more efficient?
+  for k in temp_counts:
+    if temp_counts[k] > 0:
+      if not temp_counts[k] in dict[k]:
+        dict[k][temp_counts[k]] = 0
+
+      dict[k][temp_counts[k]] += 1
 
   return dict
 
-# NOTE: *Very* similar to _get_horizontal_count. Could centralize somehow?
+# Take a list of count dicts and compile into one
+func _squash_count_dicts (count_dict_list):
+  var ret_dict = {}
+
+  for count_dict in count_dict_list:
+    for color in count_dict:
+      if not color in ret_dict: ret_dict[color] = {}
+
+      for num in count_dict[color]:
+        if not num in ret_dict[color]:
+          ret_dict[color][num] = count_dict[color][num]
+        else:
+          ret_dict[color][num] += count_dict[color][num]
+
+  return ret_dict
+
+# Get count dict based on all horizontal rows
+func _get_horizontal_count (color_matrix):
+  var count_dicts = []
+  var col_num = color_matrix.size()
+  var row_num = color_matrix[0].size()
+
+  for row_index in row_num:
+    var color_list = []
+
+    for col_index in col_num:
+      var color = color_matrix[col_index][row_index]
+      color_list.append(color)
+
+    var count_dict = _get_count_dict(color_list)
+    count_dicts.append(count_dict)
+
+  return _squash_count_dicts(count_dicts)
+
+# Get count dict based on all vertical columns
 func _get_vertical_count (color_matrix):
+  var count_dicts = []
+  var col_num = color_matrix.size()
+  var row_num = color_matrix[0].size()
+
+  for col_index in col_num:
+    var color_list = []
+
+    for row_index in row_num:
+      var color = color_matrix[col_index][row_index]
+      color_list.append(color)
+
+    var count_dict = _get_count_dict(color_list)
+    count_dicts.append(count_dict)
+
+  return _squash_count_dicts(count_dicts)
+
+# TODO:
+func _get_upward_horizontal_count (color_matrix):
   var dict = {
       ColorMode.RED: {},
       ColorMode.BLACK: {}
@@ -158,4 +207,3 @@ func _get_vertical_count (color_matrix):
         dict[k][temp_counts[k]] += 1
 
   return dict
-
